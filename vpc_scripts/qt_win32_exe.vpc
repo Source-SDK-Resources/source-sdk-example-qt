@@ -1,0 +1,55 @@
+$Macro QT_ROOT    "$SRCDIR\thirdparty\lgpl\qt"
+$Macro QT_MOC_DIR "$SRCDIR\moc"
+$Include "$SRCDIR\vpc_scripts\source_exe_con_base.vpc"
+
+$Configuration
+{
+	$Compiler
+	{
+		$AdditionalIncludeDirectories	"$BASE;.\;$QT_ROOT\include;$QT_ROOT\include\QtCore;$QT_ROOT\include\QtGui;$QT_ROOT\include\QtWidgets;$QT_MOC_DIR"
+		$AdditionalIncludeDirectories	"$BASE;$QT_ROOT\include\QtGui\5.12.11\QtGui"
+		$PreprocessorDefinitions		"$BASE"
+	}
+
+	$Linker
+	{
+		// Link tier0 first because Qt needs our allocators during static object initization!
+		$AdditionalDependencies				"$BASE $LIBPUBLIC\tier0.lib"
+	}
+
+}
+
+$Project
+{
+
+	$Folder	"Qt UI Files"
+	{
+	}
+
+	$Folder "Link Libraries" [$QTDEBUG]
+	{
+		$Lib								"$QT_ROOT/lib/qtmaind"
+		$Lib								"$QT_ROOT/lib/Qt5Cored"
+		$Lib								"$QT_ROOT/lib/Qt5Guid"
+		$Lib								"$QT_ROOT/lib/Qt5Widgetsd"
+	}
+	
+	$Folder "Link Libraries" [!$QTDEBUG]
+	{
+		$Lib								"$QT_ROOT/lib/qtmain"
+		$Lib								"$QT_ROOT/lib/Qt5Core"
+		$Lib								"$QT_ROOT/lib/Qt5Gui"
+		$Lib								"$QT_ROOT/lib/Qt5Widgets"
+	}
+}
+
+$CustomBuildStep "moc"
+//$PreBuildEvent
+{
+	$AdditionalDependencies "$(InputDir)$(InputName)"
+	$Description	"Running Qt moc on $(InputFileName)..."
+	$CommandLine	"if not exist $QT_MOC_DIR mkdir $QT_MOC_DIR "\n" \
+	" echo $QT_ROOT\bin\moc --compiler-flavor msvc -o $QT_MOC_DIR\$(InputFileName) $(InputDir)$(InputName) " "\n" \
+		" $QT_ROOT\bin\moc --compiler-flavor msvc -o $QT_MOC_DIR\$(InputFileName) $(InputDir)$(InputName)"
+	$Outputs	"$QT_MOC_DIR\$(InputFileName)"
+}

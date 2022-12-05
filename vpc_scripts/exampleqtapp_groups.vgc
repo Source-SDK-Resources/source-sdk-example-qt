@@ -1,0 +1,12 @@
+//-----------------------------------------------------------------------------
+//	EXAMPLEQTAPP_GROUPS.VGC
+//
+//	Group configurations for exampleqtapp
+//-----------------------------------------------------------------------------
+
+$Group "exampleqtapp"
+{
+	"tier1"
+	"mathlib"
+	"exampleqtapp"
+}

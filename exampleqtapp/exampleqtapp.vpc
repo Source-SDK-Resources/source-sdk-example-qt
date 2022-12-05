@@ -1,0 +1,71 @@
+$Macro SRCDIR		".."
+$Macro OUTBINDIR	"$SRCDIR\..\game\bin"
+
+$Include "qt_win32_exe.vpc"
+
+$Configuration
+{
+	$Compiler
+	{
+		$AdditionalIncludeDirectories	"$BASE;$SRCDIR\public;$SRCDIR\public\mathlib\$SRCDIR\public\tier0;$SRCDIR\public\tier1"
+		$PreprocessorDefinitions		"$BASE;"
+	}
+
+	$Linker
+	{
+		$AdditionalDependencies				"$BASE;comctl32.lib;legacy_stdio_definitions.lib"
+	}
+
+}
+
+$Project "MdlView"
+{
+
+	$Folder	"Qt UI Files"
+	{
+		$File "ui.h"
+		$File "ui.cpp"
+		$DynamicFile "ui.h.moc"
+
+		$File "matsyswindow.h"
+		$File "matsyswindow.cpp"
+		$DynamicFile "matsyswindow.h.moc"
+	}
+
+	$Folder	"Source Files"
+	{
+		$File "main.cpp"
+	
+		$File "sourceinit.cpp"
+		$File "sourceinit.h"
+
+		$File "studiomodel.cpp"
+		$File "studiomodel.h"
+
+		$Folder	"Common Files"
+		{
+			$File "$SRCDIR\public\filesystem_init.cpp"
+			$File "$SRCDIR\public\studio.cpp"
+			$File "$SRCDIR\public\bone_setup.cpp"
+			$File "$SRCDIR\public\CollisionUtils.cpp"
+		}
+	}
+
+
+	$Folder	"Link Libraries"
+	{
+		$Lib bitmap
+		$Lib mathlib
+
+		$Lib tier0
+		$Lib tier1
+		$Lib tier2
+		$Lib tier3
+
+		$Lib vstdlib
+		$Lib vtf
+
+		$Lib "$LIBCOMMON/lzma"
+	}
+
+}
